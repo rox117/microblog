@@ -1,9 +1,15 @@
 from flask import render_template, flash, redirect
 from app import app
-from .form import LoginForm
+from .forms import LoginForm
 
 # index view function suppressed for brevity
-
+@app.route('/')
+@app.route('/index')
+def index():
+    user = {'nickname': 'Miguel'}  # fake user
+    return render_template('index.html',
+                           title='Home',
+                           user=user)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -13,4 +19,5 @@ def login():
         return redirect('/index')
     return render_template('login.html', 
                            title='Sign In',
-                           form=form)
+                           form=form,
+                           providers=app.config['OPENID_PROVIDERS'])
